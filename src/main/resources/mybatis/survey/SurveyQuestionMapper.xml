@@ -61,7 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where question_id = #{questionId}
     </select>
         
-    <insert id="insertSurveyQuestion" keyProperty="questionId" useGeneratedKeys="true"  parameterType="com.ruoyi.project.system.domain.survey.SurveyQuestion">
+    <insert id="insertSurveyQuestion" parameterType="com.ruoyi.project.system.domain.survey.SurveyQuestion">
+        <selectKey keyProperty="questionId" order="BEFORE" resultType="Long">
+            select SEQ_T_SURVEY_QUESTION.nextval as id from DUAL
+        </selectKey>
         insert into t_survey_question
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="questionId != null">question_id,</if>

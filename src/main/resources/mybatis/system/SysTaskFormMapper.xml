@@ -27,13 +27,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertSysTaskForm" parameterType="com.ruoyi.project.system.domain.SysTaskForm" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSysTaskForm" parameterType="com.ruoyi.project.system.domain.SysTaskForm" >
+        <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+            select SEQ_SYS_TASK_FORM.nextval as id from DUAL
+        </selectKey>
         insert into sys_task_form
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
             <if test="formId != null">form_id,</if>
             <if test="taskId != null">task_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
             <if test="formId != null">#{formId},</if>
             <if test="taskId != null">#{taskId},</if>
          </trim>
