@@ -1,17 +1,17 @@
 package com.ruoyi.project.common;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.project.common.service.ICmnSQLService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.StringUtils;
@@ -36,6 +36,9 @@ public class CommonController
     private ServerConfig serverConfig;
 
     private static final String FILE_DELIMETER = ",";
+
+    @Autowired
+    private ICmnSQLService cmnSQLService;
 
     /**
      * 通用下载请求
@@ -158,6 +161,22 @@ public class CommonController
         catch (Exception e)
         {
             log.error("下载文件失败", e);
+        }
+    }
+
+    @GetMapping("/sql/data")
+    public AjaxResult sqlData(@RequestBody LinkedHashMap<String, Object> sqlParams, HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        try
+        {
+           Object result =  cmnSQLService.selectSQLData(sqlParams);
+            return AjaxResult.success(result);
+        }
+        catch (Exception e)
+        {
+            log.error("获取S数据失败", e);
+            return AjaxResult.error("获取S数据失败:"+e.getMessage());
         }
     }
 }
